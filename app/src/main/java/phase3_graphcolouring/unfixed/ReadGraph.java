@@ -1,17 +1,13 @@
-import java.io.*;
-import java.util.*;
-import java.util.ArrayList;
-import java.util.Arrays;
+package phase3_graphcolouring.unfixed;
 
-class ColEdge {
-	int u;
-	public int v;
-}
+import java.io.*;
+import java.util.ArrayList;
 
 public class ReadGraph {
 
 	public final static boolean DEBUG = true;
 	public final static String COMMENT = "//";
+	public final static String FILE_PATH = "app/src/main/resources/";
 	public static int globalVertices;
 	static int ourStaticTable[][];
 	static int upperBound = 0; // Upper bound
@@ -55,18 +51,25 @@ public class ReadGraph {
 
 	public static void main(String args[]) throws IOException {
 
-		chromaticNumbers cn = new chromaticNumbers();
-		upperBound ub = new upperBound();
-		lowerBound lb = new lowerBound();
+		ChromaticNumbers cn = new ChromaticNumbers();
+		UpperBound ub = new UpperBound();
+		LowerBound lb = new LowerBound();
 		//bruteForce bf = new bruteForce();
+
+		String inputfile;
 
 		ArrayList<ArrayList<Integer>> ourTable = new ArrayList<ArrayList<Integer>>(); // 2D ArrayList storing the table
 		if (args.length < 1) {
-			System.out.println("Error! No filename specified.");
-			System.exit(0);
+			inputfile = "graph01_2022.txt";
+			System.out.println("No filename specified - using default file: " + inputfile);
+//			System.exit(0);
+		}
+		else
+		{
+			inputfile = args[0];
 		}
 
-		String inputfile = args[0];
+
 
 		boolean seen[] = null;
 
@@ -74,7 +77,7 @@ public class ReadGraph {
 		ColEdge e[] = null;
 
 		try {
-			FileReader fr = new FileReader(inputfile);
+			FileReader fr = new FileReader(FILE_PATH + inputfile);
 			BufferedReader br = new BufferedReader(fr);
 
 			String record = new String();
@@ -147,6 +150,7 @@ public class ReadGraph {
 		} catch (IOException ex) {
 			// catch possible io errors from readLine()
 			System.out.println("Error! Problem reading file " + inputfile);
+			ex.printStackTrace();
 			System.exit(0);
 		}
 
@@ -173,7 +177,7 @@ public class ReadGraph {
 		storeEdgeArray = storeEdge.toArray(new Integer[0]); // we created a new array containing every element of the
 															// arraylist
 
-		checkGraphComplete cGC = new checkGraphComplete();
+		CheckGraphComplete cGC = new CheckGraphComplete();
 
 
 		long firstTime = System.currentTimeMillis();
@@ -182,7 +186,7 @@ public class ReadGraph {
 
 		int lowerBound = lb.runLowerBound(upperBound);
 
-		bruteForce bF = new bruteForce();
+		BruteForce bF = new BruteForce();
 
 
 		long midTime = System.currentTimeMillis() - firstTime;
@@ -271,13 +275,6 @@ public class ReadGraph {
 
 		long secondTime = System.currentTimeMillis() - firstTime;
 		System.out.println("Time needed: " + (secondTime/1000) + " seconds.");
-
-
-
-
-
-
-
 
 
 		/*
